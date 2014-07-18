@@ -38,16 +38,16 @@ void APIENTRY resizedCallback(GLFWwindow* window,int width,int height) {
     return;
   }
 
-  Local<Object> event = Object::New();
-  event->Set(String::NewSymbol("type"), String::NewSymbol("resize"));
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("Event"));
-  event->Set(String::NewSymbol("width"), Number::New(width));
-  event->Set(String::NewSymbol("height"), Number::New(height));
-  event->Set(String::NewSymbol("_defaultPrevented"), Boolean::New(false));
+  Local<Object> event = NanNew<Object>();
+  event->Set(NanNew<String>("type"), NanNew<String>("resize"));
+  event->Set(NanNew<String>("objectType"), NanNew<String>("Event"));
+  event->Set(NanNew<String>("width"), NanNew<Number>(width));
+  event->Set(NanNew<String>("height"), NanNew<Number>(height));
+  event->Set(NanNew<String>("_defaultPrevented"), NanNew<Boolean>(false));
 
   EMIT_EVENT
 
-  if (!event->Get(String::NewSymbol("_defaultPrevented"))->BooleanValue()) {
+  if (!event->Get(NanNew<String>("_defaultPrevented"))->BooleanValue()) {
     win->width = width;
     win->height = height;
     win->setupSize();
@@ -66,16 +66,16 @@ void APIENTRY movedCallback(GLFWwindow* window,int x,int y) {
     return;
   }
 
-  Local<Object> event = Object::New();
-  event->Set(String::NewSymbol("type"), String::NewSymbol("move"));
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("Event"));
-  event->Set(String::NewSymbol("x"), Number::New(x));
-  event->Set(String::NewSymbol("y"), Number::New(y));
-  event->Set(String::NewSymbol("_defaultPrevented"), Boolean::New(false));
+  Local<Object> event = NanNew<Object>();
+  event->Set(NanNew<String>("type"), NanNew<String>("move"));
+  event->Set(NanNew<String>("objectType"), NanNew<String>("Event"));
+  event->Set(NanNew<String>("x"), NanNew<Number>(x));
+  event->Set(NanNew<String>("y"), NanNew<Number>(y));
+  event->Set(NanNew<String>("_defaultPrevented"), NanNew<Boolean>(false));
 
   EMIT_EVENT
 
-  if (!event->Get(String::NewSymbol("_defaultPrevented"))->BooleanValue()) {
+  if (!event->Get(NanNew<String>("_defaultPrevented"))->BooleanValue()) {
     win->x = x;
     win->y = y;
   } else {
@@ -93,14 +93,14 @@ void APIENTRY closeCallback(GLFWwindow* window) {
     return;
   }
 
-  Local<Object> event = Object::New();
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("Event"));
-  event->Set(String::NewSymbol("type"), String::NewSymbol("close"));
-  event->Set(String::NewSymbol("_defaultPrevented"), Boolean::New(false));
+  Local<Object> event = NanNew<Object>();
+  event->Set(NanNew<String>("objectType"), NanNew<String>("Event"));
+  event->Set(NanNew<String>("type"), NanNew<String>("close"));
+  event->Set(NanNew<String>("_defaultPrevented"), NanNew<Boolean>(false));
 
   EMIT_EVENT
 
-  bool closePrevented = event->Get(String::NewSymbol("_defaultPrevented"))->BooleanValue();
+  bool closePrevented = event->Get(NanNew<String>("_defaultPrevented"))->BooleanValue();
 
   if (!closePrevented) {
     win->destroy();
@@ -117,12 +117,12 @@ void APIENTRY focusCallback(GLFWwindow* window, int hasFocus) {
     return;
   }
 
-  Local<Object> event = Object::New();
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("Event"));
+  Local<Object> event = NanNew<Object>();
+  event->Set(NanNew<String>("objectType"), NanNew<String>("Event"));
   if (hasFocus) {
-    event->Set(String::NewSymbol("type"), String::NewSymbol("focus"));
+    event->Set(NanNew<String>("type"), NanNew<String>("focus"));
   } else {
-    event->Set(String::NewSymbol("type"), String::NewSymbol("blur"));
+    event->Set(NanNew<String>("type"), NanNew<String>("blur"));
   }
 
   EMIT_EVENT
@@ -137,11 +137,11 @@ void APIENTRY mouseMoveCallback(GLFWwindow* window, double x, double y) {
     return;
   }
 
-  Local<Object> event = Object::New();
-  event->Set(String::NewSymbol("type"), String::NewSymbol("mousemove"));
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("MouseEvent"));
-  event->Set(String::NewSymbol("x"), Number::New(x));
-  event->Set(String::NewSymbol("y"), Number::New(y));
+  Local<Object> event = NanNew<Object>();
+  event->Set(NanNew<String>("type"), NanNew<String>("mousemove"));
+  event->Set(NanNew<String>("objectType"), NanNew<String>("MouseEvent"));
+  event->Set(NanNew<String>("x"), NanNew<Number>(x));
+  event->Set(NanNew<String>("y"), NanNew<Number>(y));
 
   EMIT_EVENT
 };
@@ -155,23 +155,22 @@ void APIENTRY mouseEnterExitCallback(GLFWwindow* window, int inside) {
     return;
   }
 
-  Local<Object> event = Object::New();
+  Local<Object> event = NanNew<Object>();
 
   if (inside) {
-    event->Set(String::NewSymbol("type"), String::NewSymbol("mouseenter"));
+    event->Set(NanNew<String>("type"), NanNew<String>("mouseenter"));
   } else {
-    event->Set(String::NewSymbol("type"), String::NewSymbol("mouseleave"));
+    event->Set(NanNew<String>("type"), NanNew<String>("mouseleave"));
   }
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("MouseEvent"));
+  event->Set(NanNew<String>("objectType"), NanNew<String>("MouseEvent"));
 
   double x, y;
   glfwGetCursorPos(win->handle, &x, &y);
-  event->Set(String::NewSymbol("x"), Number::New(x));
-  event->Set(String::NewSymbol("y"), Number::New(y));
+  event->Set(NanNew<String>("x"), NanNew<Number>(x));
+  event->Set(NanNew<String>("y"), NanNew<Number>(y));
 
   EMIT_EVENT
 };
-
 
 void APIENTRY mouseButtonCallback(GLFWwindow* window, int button, int pressed, int mods) {
   NanScope();
@@ -182,49 +181,74 @@ void APIENTRY mouseButtonCallback(GLFWwindow* window, int button, int pressed, i
     return;
   }
 
-  Local<Object> event = Object::New();
+  Local<Object> event = NanNew<Object>();
 
   switch (pressed) {
     case GLFW_PRESS:
-      event->Set(String::NewSymbol("type"), String::NewSymbol("mousedown"));
+      event->Set(NanNew<String>("type"), NanNew<String>("mousedown"));
     break;
 
     case GLFW_RELEASE:
-      event->Set(String::NewSymbol("type"), String::NewSymbol("mouseup"));
+      event->Set(NanNew<String>("type"), NanNew<String>("mouseup"));
     break;
   }
 
   switch (button) {
     // left
     case GLFW_MOUSE_BUTTON_1:
-      event->Set(String::NewSymbol("button"), Number::New(0));
+      event->Set(NanNew<String>("button"), NanNew<Number>(0));
     break;
 
     // middle
     case GLFW_MOUSE_BUTTON_3:
-      event->Set(String::NewSymbol("button"), Number::New(1));
+      event->Set(NanNew<String>("button"), NanNew<Number>(1));
     break;
 
     // right
     case GLFW_MOUSE_BUTTON_2:
-      event->Set(String::NewSymbol("button"), Number::New(2));
+      event->Set(NanNew<String>("button"), NanNew<Number>(2));
     break;
 
     // handle the other buttons
     default:
-      event->Set(String::NewSymbol("button"), Number::New(button));
+      event->Set(NanNew<String>("button"), NanNew<Number>(button));
     break;
   }
 
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("MouseEvent"));
+  event->Set(NanNew<String>("objectType"), NanNew<String>("MouseEvent"));
 
   double x, y;
   glfwGetCursorPos(win->handle, &x, &y);
-  event->Set(String::NewSymbol("x"), Number::New(x));
-  event->Set(String::NewSymbol("y"), Number::New(y));
+  event->Set(NanNew<String>("x"), NanNew<Number>(x));
+  event->Set(NanNew<String>("y"), NanNew<Number>(y));
 
   EMIT_EVENT
 };
+
+void APIENTRY mouseScrollCallback(GLFWwindow* window, double x, double y) {
+  NanScope();
+
+  Window *win = (Window *)glfwGetWindowUserPointer(window);
+
+  if (!win->handle || !win->hasEventHandler) {
+    return;
+  }
+
+  double dx = win->scrollX - x;
+  double dy = win->scrollY - y;
+
+  win->scrollX = x;
+  win->scrollY = y;
+
+  Local<Object> event = NanNew<Object>();
+  event->Set(NanNew<String>("type"), NanNew<String>("mousewheel"));
+  event->Set(NanNew<String>("wheelDelta"), NanNew<Number>(dy));
+  event->Set(NanNew<String>("wheelDeltaX"), NanNew<Number>(dx));
+  event->Set(NanNew<String>("wheelDeltaY"), NanNew<Number>(dy));
+
+  EMIT_EVENT
+}
+
 
 void APIENTRY keyboardKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
   NanScope();
@@ -239,21 +263,21 @@ void APIENTRY keyboardKeyCallback(GLFWwindow* window, int key, int scancode, int
     return;
   }
 
-  Local<Object> event = Object::New();
+  Local<Object> event = NanNew<Object>();
 
   bool repeat = false;
 
   switch (action) {
     case GLFW_PRESS:
-      event->Set(String::NewSymbol("type"), String::NewSymbol("keydown"));
+      event->Set(NanNew<String>("type"), NanNew<String>("keydown"));
     break;
 
     case GLFW_RELEASE:
-      event->Set(String::NewSymbol("type"), String::NewSymbol("keyup"));
+      event->Set(NanNew<String>("type"), NanNew<String>("keyup"));
     break;
 
     case GLFW_REPEAT:
-      event->Set(String::NewSymbol("type"), String::NewSymbol("keydown"));
+      event->Set(NanNew<String>("type"), NanNew<String>("keydown"));
       repeat = true;
     break;
   }
@@ -348,18 +372,18 @@ void APIENTRY keyboardKeyCallback(GLFWwindow* window, int key, int scancode, int
     case GLFW_KEY_M: key = 0; break;
   }
 
-  event->Set(String::NewSymbol("keyCode"), Integer::New(key));
-  event->Set(String::NewSymbol("which"), Integer::New(key));
-  // event->Set(String::NewSymbol("keyIdentifier"), glfw);
+  event->Set(NanNew<String>("keyCode"), NanNew<Integer>(key));
+  event->Set(NanNew<String>("which"), NanNew<Integer>(key));
+  // event->Set(NanNew<String>("keyIdentifier"), glfw);
 
-  event->Set(String::NewSymbol("ctrlKey"), Boolean::New(control));
-  event->Set(String::NewSymbol("shiftKey"), Boolean::New(shift));
-  event->Set(String::NewSymbol("altKey"), Boolean::New(alt));
-  event->Set(String::NewSymbol("metaKey"), Boolean::New(meta));
-  event->Set(String::NewSymbol("repeat"), Boolean::New(repeat));
-  event->Set(String::NewSymbol("location"), Integer::New(location));
+  event->Set(NanNew<String>("ctrlKey"), NanNew<Boolean>(control));
+  event->Set(NanNew<String>("shiftKey"), NanNew<Boolean>(shift));
+  event->Set(NanNew<String>("altKey"), NanNew<Boolean>(alt));
+  event->Set(NanNew<String>("metaKey"), NanNew<Boolean>(meta));
+  event->Set(NanNew<String>("repeat"), NanNew<Boolean>(repeat));
+  event->Set(NanNew<String>("location"), NanNew<Integer>(location));
 
-  event->Set(String::NewSymbol("objectType"), String::NewSymbol("KeyboardEvent"));
+  event->Set(NanNew<String>("objectType"), NanNew<String>("KeyboardEvent"));
 
   EMIT_EVENT
 };
@@ -372,6 +396,8 @@ Window::Window(int width, int height, const char *title, bool fullscreen)
 {
   this->width = width;
   this->height = height;
+  this->scrollX = 0.0;
+  this->scrollY = 0.0;
 
   this->handle = glfwCreateWindow(
     width,
@@ -392,13 +418,20 @@ Window::Window(int width, int height, const char *title, bool fullscreen)
   glfwSetWindowPosCallback(this->handle, &movedCallback);
   glfwSetWindowCloseCallback(this->handle, &closeCallback);
   glfwSetWindowFocusCallback(this->handle, &focusCallback);
-  glfwSetMouseButtonCallback(this->handle, &mouseButtonCallback);
+
   // Mouse
+  glfwSetMouseButtonCallback(this->handle, &mouseButtonCallback);
   glfwSetCursorPosCallback(this->handle, &mouseMoveCallback);
   glfwSetCursorEnterCallback(this->handle, &mouseEnterExitCallback);
+  glfwSetScrollCallback(this->handle, &mouseScrollCallback);
 
   // Keyboard
   glfwSetKeyCallback(this->handle, &keyboardKeyCallback);
+
+  // TODO: need to integrate this and keycallback
+  // glfwSetCharCallback(this->handle, &keyboardCharCallback);
+
+  // TODO: joystick / gamepad
 
   this->input_timer = (uv_timer_t *)malloc(sizeof(uv_timer_t));
   uv_timer_init(uv_default_loop(), this->input_timer);
@@ -409,7 +442,6 @@ Window::~Window() {
   if (Window::window_count <= 0) {
     glfwTerminate();
   }
-
 }
 
 void Window::destroy() {
@@ -440,8 +472,8 @@ void Window::Init(Handle<Object> exports) {
   NODE_SET_PROTOTYPE_METHOD(tpl, "setTitle", Window::setTitle);
   NODE_SET_PROTOTYPE_METHOD(tpl, "close", Window::close);
 
-  Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
-  exports->Set(NanNew<String>("Window"), constructor);
+  NanAssignPersistent<v8::Function>(constructor, tpl->GetFunction());
+  exports->Set(NanNew<String>("Window"), tpl->GetFunction());
 }
 
 NAN_METHOD(Window::eventHandler) {
@@ -557,11 +589,11 @@ NAN_METHOD(Window::getRect) {
     glfwGetWindowSize(win->handle, &width, &height);
     glfwGetWindowPos(win->handle, &x, &y);
 
-    Local<Object> ret = Object::New();
-    ret->Set(String::NewSymbol("x"), Number::New(x));
-    ret->Set(String::NewSymbol("y"), Number::New(y));
-    ret->Set(String::NewSymbol("width"), Number::New(width));
-    ret->Set(String::NewSymbol("height"), Number::New(height));
+    Local<Object> ret = NanNew<Object>();
+    ret->Set(NanNew<String>("x"), NanNew<Number>(x));
+    ret->Set(NanNew<String>("y"), NanNew<Number>(y));
+    ret->Set(NanNew<String>("width"), NanNew<Number>(width));
+    ret->Set(NanNew<String>("height"), NanNew<Number>(height));
 
     NanReturnValue(ret);
   } else {

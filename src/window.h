@@ -25,6 +25,7 @@ class Window : public ObjectWrap {
   Persistent<Object> canvasHandle;
   GLFWwindow *handle;
   int width, height, x, y;
+  double scrollX, scrollY;
   GLuint surfaceTexture[1];
   NanCallback *eventCallback;
   bool hasEventHandler;
