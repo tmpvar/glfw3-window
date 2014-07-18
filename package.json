@@ -1,0 +1,38 @@
+{
+  "name": "glfw3-window",
+  "version": "1.0.0",
+  "description": "create an cross-platform opengl context using glfw3 ",
+  "main": "glfw3-window.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmpvar/glfw3-window.git"
+  },
+  "keywords": [
+    "glfw3",
+    "addon",
+    "opengl",
+    "gles",
+    "window",
+    "keyboard",
+    "mouse",
+    "render",
+    "events"
+  ],
+  "author": "Elijah Insua <tmpvar@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tmpvar/glfw3-window/issues"
+  },
+  "homepage": "https://github.com/tmpvar/glfw3-window",
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "glfw3": "^1.0.0",
+    "nan": "^1.2.0"
+  }
+}
