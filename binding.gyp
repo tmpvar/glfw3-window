@@ -1,8 +1,4 @@
 {
-  'variables': {
-    'platform': '<(OS)',
-  },
-
   'targets': [
     {
       'target_name' : 'glfw3-window',
@@ -14,7 +10,7 @@
         'src/window.cc'
       ],
       'include_dirs' : [
-        "<!(node -e \"require('nan')\")"
+        'node_modules/nan'
       ]
     }
   ]
