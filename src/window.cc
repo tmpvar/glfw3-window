@@ -399,6 +399,13 @@ Window::Window(int width, int height, const char *title, bool fullscreen)
   this->scrollX = 0.0;
   this->scrollY = 0.0;
 
+  glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
+  // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
+  // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+  // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+  // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
+
+
   this->handle = glfwCreateWindow(
     width,
     height,
@@ -406,6 +413,16 @@ Window::Window(int width, int height, const char *title, bool fullscreen)
     fullscreen ? glfwGetPrimaryMonitor() : NULL,
     NULL
   );
+
+  assert(this->handle);
+
+  glfwMakeContextCurrent(this->handle);
+
+  glewExperimental = true;
+  if (glewInit() != GLEW_OK) {
+    printf("failed to init glew\n");
+    assert(0);
+  }
 
   Window::window_count++;
   this->hasEventHandler = false;
@@ -524,13 +541,6 @@ NAN_METHOD(Window::close) {
 void Window::setupSize() {
   if (this->handle) {
     glfwMakeContextCurrent(this->handle);
-
-    glViewport(0,0, this->width, this->height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0, this->width, 0, this->height);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
   }
 }
 

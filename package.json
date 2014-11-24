@@ -32,6 +32,7 @@
   "homepage": "https://github.com/tmpvar/glfw3-window",
   "dependencies": {
     "bindings": "^1.2.1",
+    "glew": "^1.0.1",
     "glfw3": "^1.0.0",
     "nan": "^1.2.0"
   }
